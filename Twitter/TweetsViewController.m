@@ -90,6 +90,7 @@
     [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSMutableArray *tweets, NSError *error) {
         if (error) {
             NSLog(@"%@", error.description);
+            [self.refreshControl endRefreshing];
             return;
         }
         self.tweets = tweets;

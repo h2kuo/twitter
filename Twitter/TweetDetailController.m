@@ -32,16 +32,16 @@
     self.tweet.retweetCount += self.tweet.isRetweeted ? 1 : -1;
     [self setRetweetDetails];
     if (self.tweet.isRetweeted) {
-        //[[TwitterClient sharedInstance] retweet:self.tweet];
+        [[TwitterClient sharedInstance] retweet:self.tweet];
     } else {
-        //[[TwitterClient sharedInstance] undoRetweet:self.tweet];
+        [[TwitterClient sharedInstance] undoRetweet:self.tweet];
     }
 }
 - (IBAction)onFavorite:(id)sender {
     self.tweet.isFavorited = !self.tweet.isFavorited;
     self.tweet.favoriteCount += self.tweet.isFavorited ? 1 : -1;
     [self setFavoriteDetails];
-    //[[TwitterClient sharedInstance] toggleFavoriteTweetWithId:self.tweet.tweetId on:self.tweet.isFavorited];
+    [[TwitterClient sharedInstance] toggleFavoriteTweetWithId:self.tweet.tweetId on:self.tweet.isFavorited];
 }
 - (IBAction)onReply:(id)sender {
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeViewController alloc] initWithTweetToReplyTo:self.tweet]] animated:YES completion:nil];
