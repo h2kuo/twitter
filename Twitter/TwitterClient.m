@@ -112,7 +112,7 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     [params setObject:status forKey:@"status"];
     if (tweet != nil) {
-        //[params setObject:@(tweet.tweetId) forKey:@"in_reply_to_status_id"];
+        [params setObject:@(tweet.tweetId) forKey:@"in_reply_to_status_id"];
     }
     [self POST:@"1.1/statuses/update.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Response object %@", responseObject);
