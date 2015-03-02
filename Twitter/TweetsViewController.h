@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TweetsViewController : UIViewController
-
+-(id)initWithHome:(BOOL)isHome;
 @end

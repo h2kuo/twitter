@@ -21,5 +21,6 @@
 
 @property (nonatomic, strong) Tweet *tweet;
 @property (nonatomic, weak) id<TweetCellDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarView;
 
 @end

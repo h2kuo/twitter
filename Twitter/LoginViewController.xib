@@ -18,21 +18,33 @@
                     <rect key="frame" x="91" y="142" width="139" height="33"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <state key="normal" title="Login with Twitter">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="onLogin:" destination="-1" eventType="touchUpInside" id="kJu-VM-7QI"/>
                     </connections>
                 </button>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="twitterBird" translatesAutoresizingMaskIntoConstraints="NO" id="UcY-4O-afk">
+                    <rect key="frame" x="-410" y="300" width="1139" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="Hji-fx-Woo"/>
+                    </constraints>
+                </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.023925222829999999" green="0.76138993150000001" blue="0.96618121599999995" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="6cN-Pt-u9t" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="142" id="3XL-pi-cwW"/>
+                <constraint firstItem="UcY-4O-afk" firstAttribute="top" secondItem="6cN-Pt-u9t" secondAttribute="bottom" constant="125" id="7N8-sb-lC5"/>
+                <constraint firstAttribute="centerX" secondItem="UcY-4O-afk" secondAttribute="centerX" id="S1M-H5-HlM"/>
                 <constraint firstAttribute="centerX" secondItem="6cN-Pt-u9t" secondAttribute="centerX" id="s6G-Xo-3dE"/>
             </constraints>
             <point key="canvasLocation" x="305" y="425"/>
         </view>
     </objects>
+    <resources>
+        <image name="twitterBird" width="1139" height="926"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -13,7 +13,7 @@
 
 @interface TweetCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *avatarView;
+
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
@@ -22,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteCount;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageTopConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *retweetedLabel;
+@property (weak, nonatomic) IBOutlet UIView *retweetedView;
 
 
 @end
@@ -74,6 +77,16 @@
 
 -(void)setTweet:(Tweet *)tweet {
     _tweet = tweet;
+    if (tweet.retweetedStatus != nil) {
+        self.retweetedView.hidden = NO;
+        self.imageTopConstraint.constant = 32;
+        self.retweetedLabel.text = [NSString stringWithFormat:@"%@ retweeted", tweet.user.name];
+        tweet = tweet.retweetedStatus;
+    } else {
+        self.retweetedView.hidden = YES;
+        self.imageTopConstraint.constant = 8;
+    }
+    
     self.avatarView.image = nil;
     [self.avatarView setImageWithURL:[NSURL URLWithString:tweet.user.profileImageUrl]];
     self.authorLabel.text = tweet.user.name;
@@ -81,6 +94,7 @@
     self.timeLabel.text = [self relativeTimeStamp:tweet.createdAt];
     self.tweetLabel.attributedText = tweet.attributedText;
     self.tweetLabel.userInteractionEnabled = YES;
+
 
     [self.tweetLabel sizeToFit];
     [self setFavoriteDetails];

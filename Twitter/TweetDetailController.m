@@ -10,6 +10,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "TwitterClient.h"
 #import "ComposeViewController.h"
+#import "ProfileViewController.h"
 
 @interface TweetDetailController ()
 @property (weak, nonatomic) IBOutlet UIImageView *avatarView;
@@ -23,6 +24,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
 @property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteLabel;
+@property (weak, nonatomic) IBOutlet UIView *retweetedView;
+@property (weak, nonatomic) IBOutlet UILabel *retweetedLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageTopConstraint;
 
 @end
 
@@ -62,14 +66,30 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)onProfileTap:(id)sender {
+    User *user = self.tweet.retweetedStatus == nil ? self.tweet.user : self.tweet.retweetedStatus.user;
+    [self.navigationController pushViewController:[[ProfileViewController alloc] initWithUser:user] animated:YES];
+}
+
 -(void)setTweetDetails {
+    Tweet *tweet = self.tweet;
+    if (self.tweet.retweetedStatus != nil) {
+        self.retweetedView.hidden = NO;
+        self.imageTopConstraint.constant = 39;
+        self.retweetedLabel.text = [NSString stringWithFormat:@"%@ retweeted", self.tweet.user.name];
+        tweet = self.tweet.retweetedStatus;
+    } else {
+        self.retweetedView.hidden = YES;
+        self.imageTopConstraint.constant = 15;
+    }
+    
     self.avatarView.image = nil;
-    NSString *biggerUrl = [self.tweet.user.profileImageUrl stringByReplacingOccurrencesOfString:@".png" withString:@"_bigger.png"];
+    NSString *biggerUrl = [tweet.user.profileImageUrl stringByReplacingOccurrencesOfString:@".png" withString:@"_bigger.png"];
     [self.avatarView setImageWithURL:[NSURL URLWithString:biggerUrl]];
-    self.authorLabel.text = self.tweet.user.name;
-    self.userLabel.text = [NSString stringWithFormat:@"@%@", self.tweet.user.screenname];
-    self.tweetLabel.attributedText = self.tweet.attributedText;
-    self.timeLabel.text = [NSDateFormatter localizedStringFromDate:self.tweet.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+    self.authorLabel.text = tweet.user.name;
+    self.userLabel.text = [NSString stringWithFormat:@"@%@", tweet.user.screenname];
+    self.tweetLabel.attributedText = tweet.attributedText;
+    self.timeLabel.text = [NSDateFormatter localizedStringFromDate:tweet.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
     
     [self setFavoriteDetails];
     [self setRetweetDetails];
@@ -77,11 +97,12 @@
 }
 
 - (void)setFavoriteDetails {
-    [self.favoriteButton setImage:[UIImage imageNamed:self.tweet.isFavorited ? @"favorite_on" : @"favorite"] forState:UIControlStateNormal];
-    self.favoriteCount.text = self.tweet.favoriteCount > 0 ? [NSNumberFormatter localizedStringFromNumber:@(self.tweet.favoriteCount) numberStyle:NSNumberFormatterDecimalStyle] : @"";
-    if (self.tweet.favoriteCount > 0) {
-        self.favoriteLabel.text = self.tweet.favoriteCount == 1 ? @"FAVORITE" : @"FAVORITES";
-        self.favoriteCount.text = [NSNumberFormatter localizedStringFromNumber:@(self.tweet.favoriteCount) numberStyle:NSNumberFormatterDecimalStyle];
+    Tweet *tweet = self.tweet.retweetedStatus != nil ? self.tweet.retweetedStatus : self.tweet;
+    [self.favoriteButton setImage:[UIImage imageNamed:tweet.isFavorited ? @"favorite_on" : @"favorite"] forState:UIControlStateNormal];
+    self.favoriteCount.text = tweet.favoriteCount > 0 ? [NSNumberFormatter localizedStringFromNumber:@(self.tweet.favoriteCount) numberStyle:NSNumberFormatterDecimalStyle] : @"";
+    if (tweet.favoriteCount > 0) {
+        self.favoriteLabel.text = tweet.favoriteCount == 1 ? @"FAVORITE" : @"FAVORITES";
+        self.favoriteCount.text = [NSNumberFormatter localizedStringFromNumber:@(tweet.favoriteCount) numberStyle:NSNumberFormatterDecimalStyle];
     } else {
         self.favoriteLabel.text = @"";
         self.favoriteCount.text = @"";
@@ -89,11 +110,12 @@
 }
 
 - (void)setRetweetDetails {
-    [self.retweetButton setImage:[UIImage imageNamed:self.tweet.isRetweeted ? @"retweet_on" : @"retweet"] forState:UIControlStateNormal];
-    self.retweetCount.text = self.tweet.retweetCount > 0 ? [NSNumberFormatter localizedStringFromNumber:@(self.tweet.retweetCount) numberStyle:NSNumberFormatterDecimalStyle] : @"";
-    if (self.tweet.retweetCount > 0) {
-        self.retweetLabel.text = self.tweet.retweetCount == 1 ? @"RETWEET" : @"RETWEETS";
-        self.retweetCount.text = [NSNumberFormatter localizedStringFromNumber:@(self.tweet.retweetCount) numberStyle:NSNumberFormatterDecimalStyle];
+    Tweet *tweet = self.tweet.retweetedStatus != nil ? self.tweet.retweetedStatus : self.tweet;
+    [self.retweetButton setImage:[UIImage imageNamed:tweet.isRetweeted ? @"retweet_on" : @"retweet"] forState:UIControlStateNormal];
+    self.retweetCount.text = tweet.retweetCount > 0 ? [NSNumberFormatter localizedStringFromNumber:@(self.tweet.retweetCount) numberStyle:NSNumberFormatterDecimalStyle] : @"";
+    if (tweet.retweetCount > 0) {
+        self.retweetLabel.text = tweet.retweetCount == 1 ? @"RETWEET" : @"RETWEETS";
+        self.retweetCount.text = [NSNumberFormatter localizedStringFromNumber:@(tweet.retweetCount) numberStyle:NSNumberFormatterDecimalStyle];
     } else {
         self.retweetCount.text = @"";
         self.retweetLabel.text = @"";
